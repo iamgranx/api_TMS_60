@@ -1,6 +1,5 @@
 import React from "react";
 
-import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -39,12 +38,10 @@ const PostWrapper = styled("div")`
 `;
 
 const Post = ({ id, title, body }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleClick = () => {
-    dispatch({ type: "TEST", payload: id });
-    // navigate(`/posts/${id}`);
+    navigate(`/posts/${id}`);
   };
 
   return (

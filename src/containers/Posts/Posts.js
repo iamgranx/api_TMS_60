@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from "react";
 
-import styled from 'styled-components';
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
-import { getPosts } from '../../api/posts';
-import Post from '../../components/Post';
-import { useRequest } from '../../hooks/useRequest';
+import Post from "../../components/Post";
+import { getPosts, getSlice } from "../../store/posts";
+import * as Statuses from "../../store/statuses";
 
-const PostsWrapper = styled('section')`
+const PostsWrapper = styled("section")`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -18,13 +19,20 @@ const PostsWrapper = styled('section')`
 `;
 
 const Posts = () => {
-  const { data: posts, loading, error } = useRequest(getPosts);
+  const dispatch = useDispatch();
+  const { posts, postsRequestStatus } = useSelector(getSlice);
+
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
 
   return (
     <PostsWrapper>
-      {loading && 'loading...'}
-      {error && 'some error...'}
-      {!loading && !error && posts?.map(post => <Post key={post.id} {...post} />)}
+      {postsRequestStatus === Statuses.PENDING && "loading..."}
+      {postsRequestStatus === Statuses.FAILURE && "some error..."}
+      {posts?.map((post) => (
+        <Post key={post.id} {...post} />
+      ))}
     </PostsWrapper>
   );
 };
