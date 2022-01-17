@@ -1,12 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
-import ErrorInterceptor from '../../hocs/ErrorInterceptor';
+import ErrorInterceptor from "../../hocs/ErrorInterceptor";
 
-const PostWrapper = styled('div')`
+const PostWrapper = styled("div")`
   flex: 1 0 calc(25% - 8px);
   display: flex;
   flex-direction: column;
@@ -38,10 +39,12 @@ const PostWrapper = styled('div')`
 `;
 
 const Post = ({ id, title, body }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/posts/${id}`);
+    dispatch({ type: "TEST", payload: id });
+    // navigate(`/posts/${id}`);
   };
 
   return (

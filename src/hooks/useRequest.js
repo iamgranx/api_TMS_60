@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-export const useRequest = asyncRequestFunc => {
+export const useRequest = (asyncRequestFunc) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -9,7 +9,7 @@ export const useRequest = asyncRequestFunc => {
     setLoading(true);
 
     asyncRequestFunc()
-      .then(data => setData(data))
+      .then((data) => setData(data))
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, [asyncRequestFunc]);
