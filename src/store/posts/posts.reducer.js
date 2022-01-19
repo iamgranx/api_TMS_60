@@ -3,11 +3,21 @@ import {
   SET_POSTS,
   SET_POSTS_REQUEST_STATUS_FAILURE,
   SET_POSTS_REQUEST_STATUS_PENDING,
+  SET_POST,
+  SET_POST_REQUEST_STATUS_FAILURE,
+  SET_POST_REQUEST_STATUS_PENDING,
+  SET_POST_COMMENTS,
+  SET_POST_COMMENTS_REQUEST_STATUS_FAILURE,
+  SET_POST_COMMENTS_REQUEST_STATUS_PENDING,
 } from "./posts.actions";
 
 const initialState = {
   postsRequestStatus: Statuses.UNCALLED,
+  postRequestStatus: Statuses.UNCALLED,
+  postCommentsRequestStatus: Statuses.UNCALLED,
   posts: [],
+  post: null,
+  postComments: [],
 };
 
 export const postsReducer = (state = initialState, action) => {
@@ -22,6 +32,28 @@ export const postsReducer = (state = initialState, action) => {
       };
     case SET_POSTS_REQUEST_STATUS_FAILURE:
       return { ...state, postsRequestStatus: Statuses.FAILURE };
+
+    case SET_POST_REQUEST_STATUS_PENDING:
+      return { ...state, postRequestStatus: Statuses.PENDING };
+    case SET_POST:
+      return {
+        ...state,
+        post: action.payload,
+        postRequestStatus: Statuses.SUCCESS,
+      };
+    case SET_POST_REQUEST_STATUS_FAILURE:
+      return { ...state, postRequestStatus: Statuses.FAILURE };
+
+    case SET_POST_COMMENTS_REQUEST_STATUS_PENDING:
+      return { ...state, postCommentsRequestStatus: Statuses.PENDING };
+    case SET_POST_COMMENTS:
+      return {
+        ...state,
+        postComments: action.payload,
+        postCommentsRequestStatus: Statuses.SUCCESS,
+      };
+    case SET_POST_COMMENTS_REQUEST_STATUS_FAILURE:
+      return { ...state, postCommentsRequestStatus: Statuses.FAILURE };
     default:
       return state;
   }

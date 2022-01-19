@@ -4,8 +4,6 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-import ErrorInterceptor from "../../hocs/ErrorInterceptor";
-
 const PostWrapper = styled("div")`
   flex: 1 0 calc(25% - 8px);
   display: flex;
@@ -53,7 +51,7 @@ const Post = ({ id, title, body }) => {
   );
 };
 
-export default ErrorInterceptor(Post);
+export default Post;
 
 Post.propTypes = {
   id: PropTypes.number.isRequired,

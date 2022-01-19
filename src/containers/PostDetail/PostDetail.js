@@ -1,12 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useEffect } from "react";
 
-import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import { getPost, getPostComments } from '../../api/posts';
-import { useRequest } from '../../hooks/useRequest';
+import { getSlice, getPost, getPostComments } from "../../store/posts";
+import * as Statuses from "../../store/statuses";
 
-const PostDetailWrapper = styled('section')`
+const PostDetailWrapper = styled("section")`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -17,7 +18,7 @@ const PostDetailWrapper = styled('section')`
   box-sizing: border-box;
 `;
 
-const CommentsWrapper = styled('ol')`
+const CommentsWrapper = styled("ol")`
   margin: 0px 0px 0px 16px;
   padding: 0px;
 
@@ -40,38 +41,45 @@ const CommentsWrapper = styled('ol')`
 `;
 
 const PostDetail = () => {
+  const dispatch = useDispatch();
+  const { post, postRequestStatus, postComments, postCommentsRequestStatus } =
+    useSelector(getSlice);
+
   const params = useParams();
 
-  const requestPostComments = useCallback(() => getPostComments(params.id), [params.id]);
-  const { data: comments, loading: loadingComments, error: errorComments } = useRequest(requestPostComments);
+  useEffect(() => {
+    if (params.id) {
+      dispatch(getPost(params.id));
+      dispatch(getPostComments(params.id));
+    }
+  }, [dispatch, params.id]);
 
-  const requestPostById = useCallback(() => getPost(params.id), [params.id]);
-  const { data: post, loading: loadingPost, error: errorPost } = useRequest(requestPostById);
-
-  const isLoading = loadingComments || loadingPost;
-  const isError = errorComments || errorPost;
+  const isLoading = [postRequestStatus, postCommentsRequestStatus].includes(
+    Statuses.PENDING
+  );
+  const isError = [postRequestStatus, postCommentsRequestStatus].includes(
+    Statuses.FAILURE
+  );
 
   return (
     <PostDetailWrapper>
-      {isLoading && 'loading...'}
-      {isError && 'some error...'}
-      {!isLoading && !isError && post && (
+      {isLoading && "loading..."}
+      {isError && "some error..."}
+      {!isLoading && !isError && post && !!postComments.length && (
         <>
           <h1>{post.title}</h1>
           <p>{post.body}</p>
+          <CommentsWrapper>
+            {postComments?.map((comment) => (
+              <li key={comment.id}>
+                <h5>{comment.name}</h5>
+                <span>{comment.email}</span>
+                <p>{comment.body}</p>
+              </li>
+            ))}
+          </CommentsWrapper>
         </>
       )}
-      <CommentsWrapper>
-        {!isLoading &&
-          !isError &&
-          comments?.map(comment => (
-            <li key={comment.id}>
-              <h5>{comment.name}</h5>
-              <span>{comment.email}</span>
-              <p>{comment.body}</p>
-            </li>
-          ))}
-      </CommentsWrapper>
     </PostDetailWrapper>
   );
 };
