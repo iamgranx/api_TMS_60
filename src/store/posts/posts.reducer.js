@@ -11,7 +11,7 @@ import {
   SET_POST_COMMENTS_REQUEST_STATUS_PENDING,
 } from "./posts.actions";
 
-const initialState = {
+export const initialState = {
   postsRequestStatus: Statuses.UNCALLED,
   postRequestStatus: Statuses.UNCALLED,
   postCommentsRequestStatus: Statuses.UNCALLED,
@@ -19,7 +19,7 @@ const initialState = {
   post: null,
   postComments: [],
 };
-
+/////////
 export const postsReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_POSTS_REQUEST_STATUS_PENDING:
