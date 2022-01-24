@@ -1,1 +1,1 @@
-export { defailt } from './Todo';
+export { default } from './Todo';

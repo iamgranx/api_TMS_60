@@ -36,7 +36,7 @@ const Todo = ({ completed, title}) => {
 
   // const handleClick = () => {
   //   navigate(`/todos/${id}`);
-  //}
+  // }
 
     return (
         <TodoWrapper>
